@@ -31,7 +31,8 @@
 
 <div style='position: fixed; top: 10px; width:100%; text-align: center; z-index: 1;'>
   <button class="button btn" id="btn1"><i class="fas fa-arrow-left"></i> Regresar</button>
-  <button class="button btn" id="btn2" style="display:none ;">Siguiente Punto<i class="fas fa-arrow-right"></i></button>
+  <button class="button btn" id="btn2" style="visibility: hidden;">Siguiente Punto<i
+      class="fas fa-arrow-right"></i></button>
 </div>
 
 <div
@@ -59,17 +60,14 @@
         var m = document.querySelector("a-marker")
         m.addEventListener("markerFound", (e) => {
           console.log("found")
-          document.getElementById("btn1").style.display = "none";
-          document.getElementById("btn1").style.display = "inline";
-
-          document.getElementById("btn2").style.display = "inline";
+          document.getElementById("btn2").style.visibility = "visible";
+          document.getElementById("btn1").style.visibility = "hidden";
 
         })
         m.addEventListener("markerLost", (e) => {
           console.log("lost")
-          document.getElementById("btn2").style.display = "none";
-          document.getElementById("btn1").style.display = "inline";
-
+          document.getElementById("btn2").style.visibility = "hidden";
+          document.getElementById("btn1").style.visibility = "visible";
         })
 
 

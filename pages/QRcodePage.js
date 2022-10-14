@@ -36,7 +36,7 @@ class QRcodePage extends React.Component {
         <h1>Guia itesa</h1>
         <Html5QrcodePlugin
           fps={10}
-          qrbox={250}
+          qrbox={500}
           disableFlip={true}
           qrCodeSuccessCallback={this.onNewScanResult}
         />
@@ -44,12 +44,14 @@ class QRcodePage extends React.Component {
           isOpen={this.state.showModal}
           contentLabel="Minimal Modal Example"
         >
-          <h1>Guia itesa</h1>
-          <p>Quieres acceder a esta ruta?</p>
-          <Link href={this.state.urlRoute}>
-            <a>Ir a ruta</a>
-          </Link>
-          <button onClick={this.handleCloseModal}>No</button>
+          <div style={{ backgroundColor: "#000" }}>
+            <h1>Guia itesa</h1>
+            <p>Quieres acceder a esta ruta?</p>
+            <Link href={"http://" + this.state.urlRoute}>
+              <a>Ir a ruta</a>
+            </Link>
+            <button onClick={this.handleCloseModal}>No</button>
+          </div>
         </ReactModal>
       </div>
     );
@@ -58,7 +60,7 @@ class QRcodePage extends React.Component {
   onNewScanResult(decodedText, decodedResult) {
     // Handle the result here.
     console.log(`Scan result: ${decodedText}`, decodedResult);
-    let finalURL = "http://" + decodedText;
+    let finalURL = decodedText;
     this.urlRefRoute(finalURL);
     console.log(this.state.urlRoute);
     this.handleOpenModal();
