@@ -65,6 +65,8 @@ export default function agregarRuta() {
               .post(urlApi + "/admin/rutas/agregar", nuevaRuta)
               .then((res) => {
                 console.log(res);
+                //redirect a la pagina de rutas
+                window.location.href = "/gestorRutasTarjetas";
               })
               .catch((err) => {
                 console.log(err);
@@ -109,15 +111,26 @@ export default function agregarRuta() {
             {tarjetas &&
               tarjetas.map((tarjeta) => {
                 return (
-                  <button
-                    key={tarjeta.id}
-                    onClick={() => {
-                      setPuntosLista([...puntosLista, tarjeta.id]);
-                      setNumeroPuntos(numeroPuntos + 1);
-                    }}
-                  >
-                    {tarjeta.propiedades.nombre}
-                  </button>
+                  <div>
+                    <button
+                      key={tarjeta.id}
+                      onClick={() => {
+                        setPuntosLista([...puntosLista, [tarjeta.id, "IZQ"]]);
+                        setNumeroPuntos(numeroPuntos + 1);
+                      }}
+                    >
+                      {tarjeta.propiedades.nombre} Direccion Izquierda
+                    </button>
+                    <button
+                      key={tarjeta.id + 100}
+                      onClick={() => {
+                        setPuntosLista([...puntosLista, [tarjeta.id, "DER"]]);
+                        setNumeroPuntos(numeroPuntos + 1);
+                      }}
+                    >
+                      {tarjeta.propiedades.nombre} Direccion Derecha
+                    </button>
+                  </div>
                 );
               })}
             {/* Boton para eliminar la ultima tarjeta agregada a puntosLista y restar 1 a numeroPuntos */}
