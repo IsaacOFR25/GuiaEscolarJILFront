@@ -2,7 +2,9 @@ import React from "react";
 import axios from "axios";
 import Link from "next/link";
 
-const urlApi = "http://localhost:3001";
+
+const urlApi = "https://api-guia-escolar.herokuapp.com/" || "localhost:3001";
+
 export default function GeneradorRutas() {
   const [tarjetas, setTarjetas] = React.useState(null);
   const [rutas, setRutas] = React.useState(null);

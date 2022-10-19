@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 
-const urlApi = "http://localhost:3001";
+const urlApi = "https://api-guia-escolar.herokuapp.com/" || "localhost:3001";
 
 export default function agregarTarjeta() {
   const [identificador, setIdentificador] = React.useState("");
