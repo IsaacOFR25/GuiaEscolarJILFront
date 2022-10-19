@@ -111,7 +111,10 @@ export default function GeneradorRutas() {
                     Eliminar
                   </button>
                   {/* Peticion get para generar un QR con la api, le envia el string: "ruta"+ruta.id */}
-                  <a href={urlApi + "/generadorQR/" + "ruta" + ruta.id}>
+                  <a
+                    href={urlApi + "/generadorQR/" + "ruta" + ruta.id}
+                    download="true"
+                  >
                     <button>Generar QR</button>
                   </a>
                 </div>
