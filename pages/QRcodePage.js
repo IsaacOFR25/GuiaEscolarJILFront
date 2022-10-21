@@ -50,7 +50,7 @@ class QRcodePage extends React.Component {
         <h1>Guia itesa</h1>
         <Html5QrcodePlugin
           fps={30}
-          qrbox={500}
+          qrbox={200}
           disableFlip={true}
           qrCodeSuccessCallback={this.onNewScanResult}
         />
