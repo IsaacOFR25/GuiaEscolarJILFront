@@ -1,9 +1,7 @@
 import React from "react";
 import axios from "axios";
 
-const urlApi = "https://api-guia-escolar.herokuapp.com/";
-// const urlApi = "http://localhost:3001";
-//const urlApi = "http://192.168.1.70:3001";
+const urlApi = process.env.API_URL;
 
 export default function agregarRuta() {
   const [identificador, setIdentificador] = React.useState("");
