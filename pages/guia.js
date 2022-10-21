@@ -7,96 +7,28 @@ import Image from "next/image";
 import styles from "../styles/gestorRutasTarjetas.module.css";
 
 const urlApi = "https://api-guia-escolar.herokuapp.com";
+var longitudPunto = 0;
+var latitudPunto = 0;
+var puntosRuta = [];
 
-export default function guia() {
+export default function guia2() {
+  //Parametros de la url
   const router = useRouter();
-  //*Obtener de los parametros de la url el id de la ruta y el punto de control actual
   const { id, pc } = router.query;
-  //*Estado para guardar el nombre de la ruta
-  const [rutaNombre, setRutaNombre] = useState(null);
-  //*Estado para guardar descripcion de la ruta
-  const [rutaDescripcion, setRutaDescripcion] = useState(null);
-  //*Estado para guardar el numero de puntos de control de la ruta
-  const [rutaNumeroPuntos, setRutaNumeroPuntos] = useState(0);
-  //*Estado para guardar los puntos de control de la ruta
-  const [puntosRuta, setPuntosRuta] = useState([]);
-  //*Estado para guardar el usuarioListo
-  const [usuarioListo, setUsuarioListo] = useState(false);
-  //*Estado para guardar la ubicacion del usuario
+  //JSON ruta y JSON Punto de control
+  const [ruta, setRuta] = useState({});
+  const [punto, setPunto] = useState({});
+  //Estados de nuestra pagina
   const [ubicacion, setUbicacion] = useState([0, 0]);
-  //*Estado para guardar la distancia entre el usuario y el punto de control
   const [distancia, setDistancia] = useState(99);
-  //*Estado para guardar la visibilidad del boton de Realidad Aumentada
-  const [botonRA, setBotonRA] = useState("none");
+  const [usuarioListo, setUsuarioListo] = useState(false);
 
-  //Datos de ubicacion de el siguiente punto de control
-  const [siguientePuntoTemplate, setSiguientePuntoTemplate] = useState({
-    id: 0,
-    propiedades: {
-      nombre: "",
-      modelo: "",
-      decripcion: "",
-      fecha: "",
-      ubicacion: {
-        latitud: "20.1749",
-        longitud: "-98.0572",
-        descripcion: "Junto a mi compu",
-      },
-    },
-  });
+  useEffect(() => {
+    //Obtener ruta y dentro de esta obtener el punto de control acutual, despues llama a la funcion para obtener el punto especifico y lo guarda en el estado
+    setRuta(obtenerJSONRuta());
+  }, [id]);
 
-  //Metodo para iniciar la ruta y cambiar el estado de la ruta a "iniciada"
-  async function iniciarRuta() {
-    var siguientePunto;
-    await axios
-      .get(urlApi + "/admin/rutas/" + id)
-      .then((res) => {
-        // console.log(res.data);
-        setRutaNombre(res.data.propiedades.nombre);
-        setRutaDescripcion(res.data.propiedades.descripcion);
-        setRutaNumeroPuntos(parseInt(res.data.propiedades.numeroPuntos, 10));
-        setPuntosRuta(res.data.propiedades.puntosLista);
-        siguientePunto = res.data.propiedades.puntosLista[pc - 1][0];
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    //obtener datos de la tarjeta
-
-    axios
-      .get(urlApi + "/admin/tarjetas/" + siguientePunto)
-      .then((res) => {
-        // console.log(res.data);
-        setSiguientePuntoTemplate(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  //Metodo para calcular la distancia entre dos puntos
-  const getMetros = function (lat1, lon1, lat2, lon2) {
-    // console.count("Recibido: " + lat1 + " " + lon1 + " " + lat2 + " " + lon2);
-    const rad = function (x) {
-      return (x * Math.PI) / 180;
-    };
-    var R = 6378.137; //Radio de la tierra en km
-    var dLat = rad(lat2 - lat1);
-    var dLong = rad(lon2 - lon1);
-    var a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(rad(lat1)) *
-        Math.cos(rad(lat2)) *
-        Math.sin(dLong / 2) *
-        Math.sin(dLong / 2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    var d = R * c;
-    return 1000 * d.toFixed(6); //Retorna seis decimales
-  };
-
-  /*obtener la ubicacion del usuario con la api geoLocation, la ubicacion
-   *La ubicacion se actualiza cada 5 segundos en un modo precisión */
-  React.useEffect(() => {
+  useEffect(() => {
     const obtenerUbicacion = setInterval(() => {
       let lat;
       let lon;
@@ -109,8 +41,8 @@ export default function guia() {
             getMetros(
               parseFloat(lat),
               parseFloat(lon),
-              parseFloat(siguientePuntoTemplate.propiedades.ubicacion.latitud),
-              parseFloat(siguientePuntoTemplate.propiedades.ubicacion.longitud)
+              parseFloat(latitudPunto),
+              parseFloat(longitudPunto)
             ).toFixed(2)
           );
         },
@@ -131,7 +63,7 @@ export default function guia() {
   }, []);
 
   //Metodo para verificar a cuantos metros esta el usuario del punto de control
-  React.useEffect(() => {
+  useEffect(() => {
     if (distancia <= 10 && usuarioListo) {
       //en caso de que el usuario este a menos de 10 metros del punto de control
       //se a la api un get en la url /Tarjeta/:id/on donde id es el id del punto de control
@@ -157,6 +89,65 @@ export default function guia() {
     }
   }, [distancia]);
 
+  const obtenerJSONRuta = () => {
+    axios
+      .get(urlApi + "/admin/rutas/" + id)
+      .then((res) => {
+        return res.data;
+      })
+      .then((data) => {
+        setRuta(data);
+        return data;
+      })
+      .then((data) => {
+        obtenerJSONPunto(data.propiedades.puntosLista[pc - 1][0]);
+        puntosRuta = data.propiedades.puntosLista;
+      })
+      .catch((error) => {
+        // console.log(error);
+      });
+  };
+
+  const obtenerJSONPunto = (idPunto) => {
+    axios
+      .get(urlApi + "/admin/tarjetas/" + idPunto)
+      .then((res) => {
+        return res.data;
+      })
+      .then((data) => {
+        setPunto(data);
+        return data;
+      })
+      .then((data) => {
+        //Tambien se almacena la longitud y latitud del punto de control en variables globales
+        longitudPunto = parseFloat(data.propiedades.ubicacion.longitud);
+        latitudPunto = parseFloat(data.propiedades.ubicacion.latitud);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  //Metodo para calcular la distancia entre dos puntos
+  const getMetros = function (lat1, lon1, lat2, lon2) {
+    console.count("Recibido: " + lat1 + " " + lon1 + " " + lat2 + " " + lon2);
+    const rad = function (x) {
+      return (x * Math.PI) / 180;
+    };
+    var R = 6378.137; //Radio de la tierra en km
+    var dLat = rad(lat2 - lat1);
+    var dLong = rad(lon2 - lon1);
+    var a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(rad(lat1)) *
+        Math.cos(rad(lat2)) *
+        Math.sin(dLong / 2) *
+        Math.sin(dLong / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c;
+    return 1000 * d.toFixed(6); //Retorna seis decimales
+  };
+
   const redirigirAR = () => {
     console.log("Enviando datos a la api");
     //Verificar el camino que debe tomar el usuario
@@ -164,7 +155,8 @@ export default function guia() {
     let puntoActual = parseInt(pc, 10) - 1;
     console.log("Punto actual para array: " + puntoActual);
     //Verificar si el punto actual esta en puntosRuta
-    console.log("exsten mas puntos: " + puntoActual < puntosRuta.length);
+    console.log("Puntos de la ruta: " + puntosRuta);
+    // console.log("exsten mas puntos: " + puntoActual < puntosRuta.length);
     if (puntoActual < puntosRuta.length) {
       //obtener el valor de puntoRuta
       let puntoRuta = puntosRuta[puntoActual];
@@ -208,10 +200,10 @@ export default function guia() {
               padding: "0 0 50px 0",
             }}
           >
-            Tu siguiente punto de control es {rutaNombre}
+            Tu siguiente punto de control es {punto.propiedades.nombre}
           </h1>
           <h2>Descripcion de la ruta:</h2>
-          <p> {rutaDescripcion}</p>
+          <p> {ruta.propiedades.descripcion}</p>
           <h2
             style={{
               padding: "50px 0 0 0",
@@ -220,7 +212,7 @@ export default function guia() {
             Tienes que llegar al <b>Punto de control</b> ubicado en:
           </h2>
           <div className={styles.tarjeta}>
-            <p>{siguientePuntoTemplate.propiedades.ubicacion.descripcion}</p>
+            <p>{punto.propiedades.ubicacion.descripcion}</p>
             <div
               style={{
                 display: "flex",
@@ -228,28 +220,17 @@ export default function guia() {
                 justifyContent: "space-evenly",
               }}
             >
+              <p>Latitud: {punto.propiedades.ubicacion.latitud}</p>
               <p>
-                Latitud: {siguientePuntoTemplate.propiedades.ubicacion.latitud}
-              </p>
-              <p>
-                Longitud:{" "}
-                {siguientePuntoTemplate.propiedades.ubicacion.longitud}
+                Longitud:
+                {punto.propiedades.ubicacion.longitud}
               </p>
             </div>
           </div>
 
-          <h4>Tu ubicacion es: </h4>
-          <div
-            style={{
-              display: "flex",
-              width: "100%",
-              justifyContent: "space-evenly",
-            }}
-          >
-            <p>Latitud: {ubicacion[0] ? ubicacion[0] : "Cargando..."}</p>
-            <p>Longitud: {ubicacion[0] ? ubicacion[0] : "Cargando..."}</p>
-          </div>
-          <h4>Distancia restante: {distancia} metros</h4>
+          <h4>Tu ubicacion es: {ubicacion}</h4>
+
+          <h4>Distancia: {distancia} metros</h4>
           <div
             id="ar"
             style={{
@@ -262,8 +243,9 @@ export default function guia() {
               color: "white",
               visibility: distancia < 10 ? "visible" : "hidden",
             }}
+            onClick={() => redirigirAR()}
           >
-            <div onClick={() => redirigirAR()}>Realidad Aumentada</div>
+            Realidad Aumentada
           </div>
         </div>
       ) : (
@@ -282,7 +264,6 @@ export default function guia() {
             }}
             onClick={() => {
               setUsuarioListo(true);
-              iniciarRuta();
             }}
           >
             List@

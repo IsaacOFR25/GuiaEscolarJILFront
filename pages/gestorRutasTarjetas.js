@@ -114,7 +114,8 @@ export default function GeneradorRutas() {
           ) : (
             <p>Cargando...</p>
           )}
-          <div
+
+          <Link
             style={{
               width: "100%",
               backgroundColor: "#00B399",
@@ -124,9 +125,10 @@ export default function GeneradorRutas() {
               padding: "10px 0px",
               color: "white",
             }}
+            href="./agregarTarjeta"
           >
-            <Link href="./agregarTarjeta">Agregar tarjeta</Link>
-          </div>
+            Agregar tarjeta
+          </Link>
         </div>
         <h2>Tus rutas</h2>
         <div className="rutas">
@@ -163,7 +165,8 @@ export default function GeneradorRutas() {
           ) : (
             <p>Cargando...</p>
           )}
-          <div
+
+          <Link
             style={{
               width: "100%",
               backgroundColor: "#00B399",
@@ -173,9 +176,10 @@ export default function GeneradorRutas() {
               padding: "10px 0px",
               color: "white",
             }}
+            href="./agregarRuta"
           >
-            <Link href="./agregarRuta">Agregar Rutas</Link>
-          </div>
+            Agregar Rutas
+          </Link>
         </div>
       </div>
     </div>
