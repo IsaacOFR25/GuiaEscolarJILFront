@@ -5,6 +5,7 @@ import Link from "next/link";
 import axios from "axios";
 
 const urlApi = "https://api-guia-escolar.herokuapp.com";
+const urlAppGuia = "https://guia-escolar.herokuapp.com/guia";
 class QRcodePage extends React.Component {
   constructor(props) {
     super(props);
@@ -79,7 +80,7 @@ class QRcodePage extends React.Component {
                 color: "white",
               }}
             >
-              <Link href={urlApi + "?id=" + this.state.idRoute + "&pc=1"}>
+              <Link href={urlAppGuia + "?id=" + this.state.idRoute + "&pc=1"}>
                 Ir a ruta
               </Link>
             </div>
