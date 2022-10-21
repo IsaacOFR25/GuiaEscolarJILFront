@@ -1,7 +1,9 @@
 import React from "react";
 import axios from "axios";
 
-const urlApi = "https://api-guia-escolar.herokuapp.com/" || "localhost:3001";
+const urlApi = "https://api-guia-escolar.herokuapp.com/";
+// const urlApi = "http://localhost:3001";
+//const urlApi = "http://192.168.1.70:3001";
 
 export default function agregarTarjeta() {
   const [identificador, setIdentificador] = React.useState("");
@@ -10,12 +12,17 @@ export default function agregarTarjeta() {
     axios
       .get(urlApi + "/admin/tarjetas")
       .then((res) => {
-        //Guarda el res.data.id de la ultima tarjeta en la variable id
-        const id = res.data[res.data.length - 1].id;
-        //Convertir a int y Suma uno al id de la ultima tarjeta
-        const nuevoId = parseInt(id, 10) + 1;
-        //coloca el nuevo id en el estado identificador
-        setIdentificador(nuevoId);
+        //Si no hay tarjetas en la base de datos asignarle el id 1
+        if (res.data.length == 0) {
+          setIdentificador(1);
+        } else {
+          //Guarda el res.data.id de la ultima tarjeta en la variable id
+          const id = res.data[res.data.length - 1].id;
+          //Convertir a int y Suma uno al id de la ultima tarjeta
+          const nuevoId = parseInt(id, 10) + 1;
+          //coloca el nuevo id en el estado identificador
+          setIdentificador(nuevoId);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -37,6 +44,7 @@ export default function agregarTarjeta() {
             const modelo = e.target.modelo.value;
             const descripcion = e.target.descripcion.value;
             const fecha = e.target.fecha.value;
+            const estado = "0";
             //Ubicacion de la tarjeta
             const latitud = e.target.latitud.value;
             const longitud = e.target.longitud.value;
@@ -50,6 +58,7 @@ export default function agregarTarjeta() {
                 modelo: modelo,
                 decripcion: descripcion,
                 fecha: fecha,
+                estado: estado,
                 ubicacion: {
                   latitud: latitud,
                   longitud: longitud,

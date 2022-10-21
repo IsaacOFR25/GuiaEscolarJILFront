@@ -1,0 +1,57 @@
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.stackLayout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 3px 3px 15px 0px rgba(0, 0, 0, 0.02);
+  -webkit-box-shadow: 3px 7px 32px 0px rgba(0, 0, 0, 0.26);
+  -moz-box-shadow: 3px 7px 32px 0px rgba(0, 0, 0, 0.26);
+}
+
+.tarjetaCabeza {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tarjetaPie {
+  width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+}
+.tarjetaPieIZ {
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tarjetaPieDE {
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}

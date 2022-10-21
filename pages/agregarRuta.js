@@ -1,7 +1,10 @@
 import React from "react";
 import axios from "axios";
 
-const urlApi = "https://api-guia-escolar.herokuapp.com/" || "localhost:3001";
+const urlApi = "https://api-guia-escolar.herokuapp.com/";
+// const urlApi = "http://localhost:3001";
+//const urlApi = "http://192.168.1.70:3001";
+
 export default function agregarRuta() {
   const [identificador, setIdentificador] = React.useState("");
   const [numeroPuntos, setNumeroPuntos] = React.useState(0);
@@ -13,12 +16,17 @@ export default function agregarRuta() {
     axios
       .get(urlApi + "/admin/rutas")
       .then((res) => {
-        //Guarda el res.data.id de la ultima tarjeta en la variable id
-        const id = res.data[res.data.length - 1].id;
-        //Convertir a int y Suma uno al id de la ultima tarjeta
-        const nuevoId = parseInt(id, 10) + 1;
-        //coloca el nuevo id en el estado identificador
-        setIdentificador(nuevoId);
+        //Si no hay rutas, se le asigna el valor 1
+        if (res.data.length == 0) {
+          setIdentificador(1);
+        } else {
+          //Guarda el res.data.id de la ultima tarjeta en la variable id
+          const id = res.data[res.data.length - 1].id;
+          //Convertir a int y Suma uno al id de la ultima tarjeta
+          const nuevoId = parseInt(id, 10) + 1;
+          //coloca el nuevo id en el estado identificador
+          setIdentificador(nuevoId);
+        }
       })
       .catch((err) => {
         console.log(err);
