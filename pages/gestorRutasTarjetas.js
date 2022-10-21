@@ -3,7 +3,7 @@ import axios from "axios";
 import Link from "next/link";
 import styles from "../styles/gestorRutasTarjetas.module.css";
 
-const urlApi = process.env.API_URL;
+const urlApi = "https://api-guia-escolar.herokuapp.com";
 
 export default function GeneradorRutas() {
   const [tarjetas, setTarjetas] = React.useState(null);

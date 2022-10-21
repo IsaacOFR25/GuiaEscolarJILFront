@@ -6,7 +6,7 @@ import Image from "next/image";
 
 import styles from "../styles/gestorRutasTarjetas.module.css";
 
-const urlApi = process.env.API_URL;
+const urlApi = "https://api-guia-escolar.herokuapp.com";
 
 export default function guia() {
   const router = useRouter();

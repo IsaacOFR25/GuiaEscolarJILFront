@@ -4,7 +4,7 @@ import ReactModal from "react-modal";
 import Link from "next/link";
 import axios from "axios";
 
-const urlApi = process.env.API_URL;
+const urlApi = "https://api-guia-escolar.herokuapp.com";
 class QRcodePage extends React.Component {
   constructor(props) {
     super(props);
