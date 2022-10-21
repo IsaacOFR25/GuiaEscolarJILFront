@@ -79,11 +79,7 @@ class QRcodePage extends React.Component {
                 color: "white",
               }}
             >
-              <Link
-                href={
-                  urlGuiaEscolarLocal + "?id=" + this.state.idRoute + "&pc=1"
-                }
-              >
+              <Link href={urlApi + "?id=" + this.state.idRoute + "&pc=1"}>
                 Ir a ruta
               </Link>
             </div>
