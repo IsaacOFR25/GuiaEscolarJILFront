@@ -22,11 +22,17 @@ export default function guia2() {
   const [ubicacion, setUbicacion] = useState([0, 0]);
   const [distancia, setDistancia] = useState(99);
   const [usuarioListo, setUsuarioListo] = useState(false);
+  const [existeSigPunto, setExisteSigPunto] = useState(false);
 
   useEffect(() => {
     //Obtener ruta y dentro de esta obtener el punto de control acutual, despues llama a la funcion para obtener el punto especifico y lo guarda en el estado
     setRuta(obtenerJSONRuta());
   }, [id]);
+
+  useEffect(() => {
+    //Verifica si existe el punto de control actual
+    setExisteSigPunto(isNotNull(punto.propiedades));
+  }, [punto]);
 
   useEffect(() => {
     const obtenerUbicacion = setInterval(() => {
@@ -100,6 +106,7 @@ export default function guia2() {
         return data;
       })
       .then((data) => {
+        console.log(data.propiedades.puntosLista[pc - 1][0]);
         obtenerJSONPunto(data.propiedades.puntosLista[pc - 1][0]);
         puntosRuta = data.propiedades.puntosLista;
       })
@@ -173,10 +180,22 @@ export default function guia2() {
     } else {
       console.log("No hay mas puntos");
       //Redirigir al usuario a la pagina de finalizacion
-      window.location.href = urlApi + "/llegaste";
     }
   };
 
+  //Verifica si el valor recibido es null o undefined
+  const isNotNull = (value) => {
+    //regresa true si el valor no es null o undefined
+    console.log("El valor es: " + value, value !== null && value !== undefined);
+    return value !== null && value !== undefined;
+  };
+
+  const redirigirFinal = () => {
+    window.location.href = "/llegaste";
+  };
+
+  //Renderiza pantalla para confirmar si el usuario esta listo cuando este sea true,
+  //Renderiza seguimiento de punto cuando el usuario tenga punto, si no, redirije a llegaste.js
   return (
     //Si el usuario esta listo para comenzar la guia, se muestra el boton de comenzar
     //Si no, se muestra un mensaje de que el usuario debe estar listo para comenzar
@@ -200,7 +219,7 @@ export default function guia2() {
               padding: "0 0 50px 0",
             }}
           >
-            Tu siguiente punto de control es {punto.propiedades.nombre}
+            Tu siguiente punto de control es{punto.propiedades.nombre}
           </h1>
           <h2>Descripcion de la ruta:</h2>
           <p> {ruta.propiedades.descripcion}</p>
@@ -252,6 +271,7 @@ export default function guia2() {
         <div>
           <h1>¿Estas list@ para ver tu siguiente punto de control?</h1>
           <Image src="/img/puntoControl.png" width={500} height={500} />
+          <button onClick={() => isNotNull(punto.propiedades)}>cola</button>
           <div
             style={{
               width: "100%",
@@ -263,7 +283,7 @@ export default function guia2() {
               color: "white",
             }}
             onClick={() => {
-              setUsuarioListo(true);
+              existeSigPunto ? setUsuarioListo(true) : redirigirFinal();
             }}
           >
             List@

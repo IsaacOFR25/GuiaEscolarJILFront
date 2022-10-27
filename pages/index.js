@@ -44,20 +44,21 @@ export default function Home() {
           <p className={styles.description}>
             Te ayudaremos a encontrar tu camino en ITESA
           </p>
-          <Link
-            className={styles.button}
-            style={{
-              width: "100%",
-              backgroundColor: "#00B399",
-              marginTop: "30px",
-              borderRadius: "10px",
-              textAlign: "center",
-              padding: "10px 0px",
-              color: "white",
-            }}
-            href="./QRcodePage"
-          >
-            Escanear QR
+          <Link href="./QRcodePage">
+            <div
+              className={styles.button}
+              style={{
+                width: "100%",
+                backgroundColor: "#00B399",
+                marginTop: "30px",
+                borderRadius: "10px",
+                textAlign: "center",
+                padding: "10px 0px",
+                color: "white",
+              }}
+            >
+              Escanear QR
+            </div>
           </Link>
         </div>
       </main>
