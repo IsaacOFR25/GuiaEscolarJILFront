@@ -69,12 +69,14 @@ export default function guia2() {
   }, []);
 
   //Metodo para verificar a cuantos metros esta el usuario del punto de control
+
   useEffect(() => {
     if (distancia <= 10 && usuarioListo) {
+      console.log("Encendido tarjeta: " + pc);
       //en caso de que el usuario este a menos de 10 metros del punto de control
       //se a la api un get en la url /Tarjeta/:id/on donde id es el id del punto de control
       axios
-        .get(urlApi + "/tarjeta/" + id + "/on")
+        .get(urlApi + "/tarjeta/" + pc + "/on")
         .then((res) => {
           console.log(res.data);
         })
@@ -82,10 +84,12 @@ export default function guia2() {
           console.log(err);
         });
     } else {
+      console.log("Apagando tarjeta: " + pc);
+
       //en caso de que el usuario este a mas de 10 metros del punto de control
       //se a la api un get en la url /Tarjeta/:id/off donde id es el id del punto de control
       axios
-        .get(urlApi + "/tarjeta/" + id + "/off")
+        .get(urlApi + "/tarjeta/" + pc + "/off")
         .then((res) => {
           console.log(res.data);
         })
@@ -271,7 +275,6 @@ export default function guia2() {
         <div>
           <h1>¿Estas list@ para ver tu siguiente punto de control?</h1>
           <Image src="/img/puntoControl.png" width={500} height={500} />
-          <button onClick={() => isNotNull(punto.propiedades)}>cola</button>
           <div
             style={{
               width: "100%",
