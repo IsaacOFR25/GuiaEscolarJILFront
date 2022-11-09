@@ -264,7 +264,7 @@ export default function guia2() {
               textAlign: "center",
               padding: "10px 0px",
               color: "white",
-              visibility: distancia < 10 ? "visible" : "hidden",
+              visibility: distancia < 999 ? "visible" : "hidden",
             }}
             onClick={() => redirigirAR()}
           >
