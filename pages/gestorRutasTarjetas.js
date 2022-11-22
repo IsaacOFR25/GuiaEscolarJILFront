@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import Link from "next/link";
 import styles from "../styles/gestorRutasTarjetas.module.css";
+import { AiOutlineArrowLeft } from "react-icons/ai";
 
 const urlApi = "https://api-guia-escolar.herokuapp.com";
 
@@ -60,13 +61,36 @@ export default function GeneradorRutas() {
 
   return (
     <div className={styles.container}>
-      <div className="header">
-        <h1>Generador de rutas y gestor de tarjetas</h1>
-        <p>
-          Esta pagina genera las rutas para la app, tambien puedes agregar
-          nuevas tarjetas para apliar tus rutas
-        </p>
+      <div
+        className="header"
+        style={{
+          padding: "0 20px",
+          width: "100vw",
+          display: "flex",
+          flexWrap: "nowrap",
+          justifyContent: "space-between",
+          alignItems: "center",
+          backgroundColor: "#00B399",
+          color: "#fff",
+        }}
+      >
+        <Link href="/">
+          <div>
+            <AiOutlineArrowLeft
+              style={{ width: "40px", height: "30px", paddingRight: "10px" }}
+            />
+          </div>
+        </Link>
+        <h3>Administrador</h3>
+        <div
+          style={{ width: "30px", height: "30px", paddingLefth: "10px" }}
+        ></div>
       </div>
+
+      <p>
+        Esta pagina genera las rutas para la app, tambien puedes agregar nuevas
+        tarjetas para apliar tus rutas
+      </p>
       <div className={styles.stackLayout}>
         <h2>Tus tarjetas disponibles</h2>
         <div>
@@ -102,6 +126,23 @@ export default function GeneradorRutas() {
                         <button
                           key={tarjeta.id}
                           onClick={(e) => borrarTarjeta(tarjeta.id, e)}
+                          style={{
+                            boxShadow: "inset 0px 1px 0px 0px #f29c93",
+                            background:
+                              "linear-gradient(to bottom, #fe1a00 5%, #ce0100 100%)",
+                            backgroundColor: "#fe1a00",
+                            borderRadius: "6px",
+                            border: "1px solid #d83526",
+                            display: "inline-block",
+                            cursor: "pointer",
+                            color: "#ffffff",
+                            fontFamily: "Arial",
+                            fontSize: "15px",
+                            fontWeight: "bold",
+                            padding: "6px 24px",
+                            textDecoration: "none",
+                            textShadow: "0px 1px 0px #b23e35",
+                          }}
                         >
                           Eliminar
                         </button>
@@ -115,19 +156,21 @@ export default function GeneradorRutas() {
             <p>Cargando...</p>
           )}
 
-          <Link
-            style={{
-              width: "100%",
-              backgroundColor: "#00B399",
-              marginTop: "30px",
-              borderRadius: "10px",
-              textAlign: "center",
-              padding: "10px 0px",
-              color: "white",
-            }}
-            href="./agregarTarjeta"
-          >
-            Agregar tarjeta
+          <Link href="./agregarTarjeta">
+            <div
+              className={styles.button}
+              style={{
+                width: "100%",
+                backgroundColor: "#00B399",
+                marginTop: "30px",
+                borderRadius: "10px",
+                textAlign: "center",
+                padding: "10px 0px",
+                color: "white",
+              }}
+            >
+              Agregar Tarjeta
+            </div>
           </Link>
         </div>
         <h2>Tus rutas</h2>
@@ -145,19 +188,56 @@ export default function GeneradorRutas() {
                     <p>Identificador: {ruta.id}</p>
                   </div>
                   <div className={styles.tarjetaCabeza}>
-                    <button
-                      key={ruta.id}
-                      onClick={(e) => borrarRuta(ruta.id, e)}
-                    >
-                      Eliminar
-                    </button>
                     {/* Peticion get para generar un QR con la api, le envia el string: "ruta"+ruta.id */}
                     <a
                       href={urlApi + "/generadorQR/" + ruta.id}
                       download="true"
                     >
-                      <button>Generar QR</button>
+                      <button
+                        style={{
+                          boxShadow: "inset 0px 1px 0px 0px #3dc21b",
+                          background:
+                            "linear-gradient(to bottom, #44c767 5%, #5cbf2a 100%)",
+                          backgroundColor: "#44c767",
+                          borderRadius: "6px",
+                          border: "1px solid #18ab29",
+                          display: "inline-block",
+                          cursor: "pointer",
+                          color: "#ffffff",
+                          fontFamily: "Arial",
+                          fontSize: "15px",
+                          fontWeight: "bold",
+                          padding: "6px 24px",
+                          textDecoration: "none",
+                          textShadow: "0px 1px 0px #2f6627",
+                        }}
+                      >
+                        Generar QR
+                      </button>
                     </a>
+                    <button
+                      key={ruta.id}
+                      onClick={(e) => borrarRuta(ruta.id, e)}
+                      style={{
+                        boxShadow: "inset 0px 1px 0px 0px #f29c93",
+                        background:
+                          "linear-gradient(to bottom, #fe1a00 5%, #ce0100 100%)",
+                        backgroundColor: "#fe1a00",
+                        borderRadius: "6px",
+                        border: "1px solid #d83526",
+                        display: "inline-block",
+                        cursor: "pointer",
+                        color: "#ffffff",
+                        fontFamily: "Arial",
+                        fontSize: "15px",
+                        fontWeight: "bold",
+                        padding: "6px 24px",
+                        textDecoration: "none",
+                        textShadow: "0px 1px 0px #b23e35",
+                      }}
+                    >
+                      Eliminar
+                    </button>
                   </div>
                 </div>
               );
@@ -166,19 +246,21 @@ export default function GeneradorRutas() {
             <p>Cargando...</p>
           )}
 
-          <Link
-            style={{
-              width: "100%",
-              backgroundColor: "#00B399",
-              marginTop: "30px",
-              borderRadius: "10px",
-              textAlign: "center",
-              padding: "10px 0px",
-              color: "white",
-            }}
-            href="./agregarRuta"
-          >
-            Agregar Rutas
+          <Link href="./agregarRuta">
+            <div
+              className={styles.button}
+              style={{
+                width: "100%",
+                backgroundColor: "#00B399",
+                marginTop: "30px",
+                borderRadius: "10px",
+                textAlign: "center",
+                padding: "10px 0px",
+                color: "white",
+              }}
+            >
+              Agregar Ruta
+            </div>
           </Link>
         </div>
       </div>

@@ -1,10 +1,18 @@
 import React from "react";
 import axios from "axios";
+import Link from "next/link";
+import { AiOutlineArrowLeft, AiFillEnvironment } from "react-icons/ai";
+import { TextField, Select, MenuItem, Button } from "@mui/material";
 
 const urlApi = "https://api-guia-escolar.herokuapp.com";
 
 export default function agregarTarjeta() {
   const [identificador, setIdentificador] = React.useState("");
+  const [modelo, setModelo] = React.useState("ESP32");
+
+  const handleChange = (e) => {
+    setModelo(e.target.value);
+  };
 
   React.useEffect(() => {
     axios
@@ -29,17 +37,50 @@ export default function agregarTarjeta() {
 
   return (
     <div>
-      <h1>Agregar nueva tarjeta</h1>
-      <div>
+      <div
+        className="header"
+        style={{
+          padding: "0 20px",
+          width: "100vw",
+          display: "flex",
+          flexWrap: "nowrap",
+          justifyContent: "space-between",
+          alignItems: "center",
+          backgroundColor: "#00B399",
+          color: "#fff",
+        }}
+      >
+        <Link href="/gestorRutasTarjetas">
+          <div>
+            <AiOutlineArrowLeft
+              style={{ width: "40px", height: "30px", paddingRight: "10px" }}
+            />
+          </div>
+        </Link>
+        <h3>Agregar Tarjeta</h3>
+        <div
+          style={{ width: "30px", height: "30px", paddingLefth: "10px" }}
+        ></div>
+      </div>
+      <p style={{ margin: "10px 0 0 0", padding: "10px" }}>
+        En este apartado podras agregar nuevas tarjetas a tu guia escolar.
+        Asegurate de flashear la tarjeta que vas a agregar con el identificador
+        indicado aqui.
+      </p>
+      <div style={{ width: "100vw", padding: "30px 10px" }}>
         {/* //Formulario para agregar nueva tarjeta, se envia via axios a la api en */}
         {/* la ruta "/admin/tarjetas/agregar" */}
+
         <form
-          style={{ display: "flex", flexDirection: "column" }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+          }}
           onSubmit={(e) => {
             e.preventDefault();
             const identificador = e.target.identificador.value;
             const nombre = e.target.nombre.value;
-            const modelo = e.target.modelo.value;
+            const modeloAgg = modelo;
             const descripcion = e.target.descripcion.value;
             const fecha = e.target.fecha.value;
             const estado = "0";
@@ -53,7 +94,7 @@ export default function agregarTarjeta() {
               id: identificador,
               propiedades: {
                 nombre: nombre,
-                modelo: modelo,
+                modelo: modeloAgg,
                 decripcion: descripcion,
                 fecha: fecha,
                 estado: estado,
@@ -81,28 +122,58 @@ export default function agregarTarjeta() {
               });
           }}
         >
-          <label htmlFor="identificador">Identificador</label>
           {/* El identificador se obtiene haciendo una peticion get de las tarjetas a la
           api y sumandole uno */}
-          <input
-            type="text"
-            name="identificador"
+          <TextField
             id="identificador"
+            name="identificador"
+            label="Identificador"
+            variant="outlined"
             value={identificador}
-            readOnly
+            type="number"
+            style={{ marginBottom: "20px" }}
           />
 
-          <label htmlFor="nombre">Nombre</label>
-          <input type="text" name="nombre" id="nombre" />
-          {/* Un elemento select donde solo existen las opciones de "ESP32" y "NodeMCU" */}
-          <label htmlFor="modelo">Modelo</label>
-          <select name="modelo" id="modelo">
-            <option value="ESP32">ESP32</option>
-            <option value="NodeMCU">NodeMCU</option>
-          </select>
-          <label htmlFor="descripcion">Descripcion</label>
-          <input type="text" name="descripcion" id="descripcion" />
-          <label htmlFor="fecha">Fecha</label>
+          <TextField
+            id="nombre"
+            name="nombre"
+            label="Nombre de la tarjeta"
+            variant="outlined"
+            type="text"
+            style={{ marginBottom: "20px" }}
+          />
+
+          <Select
+            labelId="modelo"
+            id="modelo"
+            value={modelo}
+            label="Modelo"
+            onChange={handleChange}
+            style={{ marginBottom: "20px" }}
+          >
+            <MenuItem value="ESP32">ESP32</MenuItem>
+            <MenuItem value="nodeMCU">nodeMCU</MenuItem>
+          </Select>
+
+          <TextField
+            id="descripcion"
+            name="descripcion"
+            label="Descripción de la tarjeta"
+            variant="outlined"
+            type="text"
+            style={{ marginBottom: "20px" }}
+          />
+
+          <TextField
+            id="descripcionUbicacion"
+            name="descripcionUbicacion"
+            label="Descripción de la ubicación de la tarjeta"
+            variant="outlined"
+            type="text"
+            style={{ marginBottom: "20px" }}
+          />
+
+          <label htmlFor="fecha">Fecha de registro</label>
           {/* //La fecha no es editable, se genera automaticamente */}
           <input
             type="date"
@@ -110,16 +181,15 @@ export default function agregarTarjeta() {
             id="fecha"
             value={new Date().toISOString().slice(0, 10)}
             readOnly
+            style={{ padding: "10px", margin: "0 5px 20px" }}
           />
-          <label htmlFor="latitud">Latitud</label>
-          <input name="latitud" id="latitud" />
-          <label htmlFor="longitud">Longitud</label>
-          <input name="longitud" id="longitud" />
           {/* //Un boton que al presionarlo obtiene la ubicacion actual del usuario
           y remplace los valores de latitud y longitud obtenidos y los muestra
           en los inputs */}
-          <button
-            type="button"
+
+          <Button
+            variant="outlined"
+            startIcon={<AiFillEnvironment />}
             onClick={() => {
               if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
@@ -132,19 +202,31 @@ export default function agregarTarjeta() {
                 alert("Geolocation is not supported by this browser.");
               }
             }}
+            style={{ marginBottom: "20px" }}
           >
             Obtener ubicacion actual
-          </button>
-          <label htmlFor="descripcionUbicacion">
-            Descripcion de la ubicacion
-          </label>
+          </Button>
+          <label htmlFor="latitud">Latitud</label>
           <input
-            type="text"
-            name="descripcionUbicacion"
-            id="descripcionUbicacion"
-            placeholder="Describe el lugar donde estara el punto de control"
+            name="latitud"
+            id="latitud"
+            style={{ padding: "10px", margin: "0 5px" }}
           />
-          <button type="submit">Agregar</button>
+          <label htmlFor="longitud">Longitud</label>
+          <input
+            name="longitud"
+            id="longitud"
+            style={{ padding: "10px", margin: "0 5px 20px" }}
+          />
+
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            style={{ marginBottom: "20px" }}
+          >
+            Agregar tarjeta
+          </Button>
         </form>
       </div>
     </div>

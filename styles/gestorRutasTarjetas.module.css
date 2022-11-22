@@ -23,8 +23,9 @@
   padding: 10px;
   border-radius: 10px;
   box-shadow: 3px 3px 15px 0px rgba(0, 0, 0, 0.02);
-  -webkit-box-shadow: 3px 7px 32px 0px rgba(0, 0, 0, 0.26);
-  -moz-box-shadow: 3px 7px 32px 0px rgba(0, 0, 0, 0.26);
+  -webkit-box-shadow: 3px 7px 16px 0px rgba(0, 0, 0, 0.26);
+  -moz-box-shadow: 3px 7px 16px 0px rgba(0, 0, 0, 0.26);
+  margin: 20px 0;
 }
 
 .tarjetaCabeza {

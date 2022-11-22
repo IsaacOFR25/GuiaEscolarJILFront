@@ -1,5 +1,8 @@
 import React from "react";
 import axios from "axios";
+import Link from "next/link";
+import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
+import { TextField, Button } from "@mui/material";
 
 const urlApi = "https://api-guia-escolar.herokuapp.com";
 
@@ -42,8 +45,37 @@ export default function agregarRuta() {
   }, []);
   return (
     <div>
-      <h1>Agrega una nueva ruta</h1>
-      <div>
+      <div
+        className="header"
+        style={{
+          padding: "0 20px",
+          width: "100vw",
+          display: "flex",
+          flexWrap: "nowrap",
+          justifyContent: "space-between",
+          alignItems: "center",
+          backgroundColor: "#00B399",
+          color: "#fff",
+        }}
+      >
+        <Link href="/gestorRutasTarjetas">
+          <div>
+            <AiOutlineArrowLeft
+              style={{ width: "40px", height: "30px", paddingRight: "10px" }}
+            />
+          </div>
+        </Link>
+        <h3>Agregar Ruta</h3>
+        <div
+          style={{ width: "30px", height: "30px", paddingLefth: "10px" }}
+        ></div>
+      </div>
+      <p style={{ margin: "10px 0 0 0", padding: "10px" }}>
+        En este apartado podras agregar nuevas tarjetas a tu guia escolar.
+        Asegurate de flashear la tarjeta que vas a agregar con el identificador
+        indicado aqui.
+      </p>
+      <div style={{ width: "100vw", padding: "30px 10px" }}>
         {/* //Formulario para agregar nueva ruta, se envia via axios a la api en */}
         {/* la ruta "/admin/ruta/agregar" */}
         <form
@@ -54,7 +86,7 @@ export default function agregarRuta() {
             const identificador = e.target.identificador.value;
             const nombre = e.target.nombre.value;
             const descripcion = e.target.descripcion.value;
-            const fecha = e.target.fecha.value;
+            const fecha = new Date().toLocaleDateString();
             const numeroPuntosJson = { numeroPuntos: numeroPuntos };
             const puntosListaJson = { puntosLista: puntosLista };
             const nuevaRuta = {
@@ -79,77 +111,145 @@ export default function agregarRuta() {
               });
           }}
         >
-          <label htmlFor="identificador">Identificador</label>
-          <input
-            type="text"
+          <TextField
+            id="identificador"
             name="identificador"
+            label="Identificador"
+            variant="outlined"
             value={identificador}
-            readOnly
-          />
-          <label htmlFor="nombre">Nombre</label>
-          <input type="text" name="nombre" />
-          <label htmlFor="descripcion">Descripcion</label>
-          <input type="text" name="descripcion" />
-          <label htmlFor="fecha">Fecha</label>
-          <input
-            type="text"
-            name="fecha"
-            value={new Date().toLocaleDateString()}
-            readOnly
-          />
-          <label htmlFor="numeroPuntos">Numero de puntos</label>
-          <input
             type="number"
-            name="numeroPuntos"
-            value={numeroPuntos}
-            readOnly
+            style={{ marginBottom: "20px" }}
           />
-          <label htmlFor="puntosLista">Puntos de la ruta</label>
-          <input type="text" name="puntosLista" value={puntosLista} readOnly />
+          <TextField
+            id="nombre"
+            name="nombre"
+            label="Nombre o destino de la ruta"
+            variant="outlined"
+            type="text"
+            style={{ marginBottom: "20px" }}
+          />
+          <TextField
+            id="descripcion"
+            name="descripcion"
+            label="Descripción de la ruta"
+            variant="outlined"
+            type="text"
+            style={{ marginBottom: "20px" }}
+          />
 
-          <button type="submit">Agregar</button>
-        </form>
-        <div>
-          {/* A continuacion se muestra una lista de los nombres de los las tarjetas
-   cada nobre es un boton, al ser precionado se agregara el identificador de la tarjeta a el hook puntosLista y aumentara el contador de puntos*/}
-          <h1>Lista de puntos de control</h1>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            {tarjetas &&
-              tarjetas.map((tarjeta) => {
-                return (
-                  <div>
-                    <button
-                      key={tarjeta.id}
-                      onClick={() => {
-                        setPuntosLista([...puntosLista, [tarjeta.id, "IZQ"]]);
-                        setNumeroPuntos(numeroPuntos + 1);
-                      }}
-                    >
-                      {tarjeta.propiedades.nombre} Direccion Izquierda
-                    </button>
-                    <button
-                      key={tarjeta.id + 100}
-                      onClick={() => {
-                        setPuntosLista([...puntosLista, [tarjeta.id, "DER"]]);
-                        setNumeroPuntos(numeroPuntos + 1);
-                      }}
-                    >
-                      {tarjeta.propiedades.nombre} Direccion Derecha
-                    </button>
-                  </div>
-                );
-              })}
-            {/* Boton para eliminar la ultima tarjeta agregada a puntosLista y restar 1 a numeroPuntos */}
-            <button
-              onClick={() => {
-                setPuntosLista(puntosLista.slice(0, -1));
-                setNumeroPuntos(numeroPuntos - 1);
+          <div>
+            {/* A continuacion se muestra una lista de los nombres de los las tarjetas
+cada nobre es un boton, al ser precionado se agregara el identificador de la tarjeta a el hook puntosLista y aumentara el contador de puntos*/}
+            <h3>Lista de puntos de control</h3>
+            <p>
+              Selecciona en orden los puntos de control que tendra tu ruta.{" "}
+              <br />
+              Ejemplo: Tarjeta 1 - Izquierda, Tarjeta 2 - Derecha....
+            </p>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "column",
               }}
             >
-              Eliminar ultimo punto agregado
-            </button>
+              {tarjetas &&
+                tarjetas.map((tarjeta) => {
+                  return (
+                    <div
+                      style={{
+                        display: "flex",
+                        flexWrap: "nowrap",
+                        alignItems: "stretch",
+                      }}
+                    >
+                      <Button
+                        startIcon={<AiOutlineArrowLeft />}
+                        variant="outlined"
+                        key={tarjeta.id}
+                        onClick={() => {
+                          setPuntosLista([...puntosLista, [tarjeta.id, "IZQ"]]);
+                          setNumeroPuntos(numeroPuntos + 1);
+                        }}
+                        style={{ margin: "5px", width: "45%" }}
+                      >
+                        <p>{tarjeta.propiedades.nombre}</p>
+                      </Button>
+                      <Button
+                        endIcon={<AiOutlineArrowRight />}
+                        variant="outlined"
+                        key={tarjeta.id + 100}
+                        onClick={() => {
+                          setPuntosLista([...puntosLista, [tarjeta.id, "DER"]]);
+                          setNumeroPuntos(numeroPuntos + 1);
+                        }}
+                        style={{ margin: "5px", width: "45%" }}
+                      >
+                        <p>{tarjeta.propiedades.nombre}</p>
+                      </Button>
+                    </div>
+                  );
+                })}
+              {/* Boton para eliminar la ultima tarjeta agregada a puntosLista y restar 1 a numeroPuntos */}
+              <button
+                onClick={() => {
+                  setPuntosLista(puntosLista.slice(0, -1));
+                  setNumeroPuntos(numeroPuntos > 0 ? numeroPuntos - 1 : 0);
+                }}
+                type="button"
+                style={{
+                  boxShadow: "inset 0px 1px 0px 0px #f29c93",
+                  background:
+                    "linear-gradient(to bottom, #fe1a00 5%, #ce0100 100%)",
+                  backgroundColor: "#fe1a00",
+                  borderRadius: "6px",
+                  border: "1px solid #d83526",
+                  display: "inline-block",
+                  cursor: "pointer",
+                  color: "#ffffff",
+                  fontFamily: "Arial",
+                  fontSize: "15px",
+                  fontWeight: "bold",
+                  padding: "6px 24px",
+                  textDecoration: "none",
+                  textShadow: "0px 1px 0px #b23e35",
+                }}
+              >
+                Eliminar ultimo punto agregado
+              </button>
+            </div>
           </div>
-        </div>
+
+          <div style={{ display: "flex", flexWrap: "nowrap" }}>
+            <div>
+              <TextField
+                id="numeroPuntos"
+                name="numeroPuntos"
+                label="No. total de puntos"
+                variant="outlined"
+                type="text"
+                value={numeroPuntos}
+                readOnlys
+                style={{ margin: "20px 2px" }}
+              />
+            </div>{" "}
+            <div>
+              <TextField
+                id="puntosLista"
+                name="puntosLista"
+                label="Puntos de la ruta"
+                variant="outlined"
+                type="text"
+                value={puntosLista}
+                readOnly
+                style={{ margin: "20px 2px" }}
+              />
+            </div>
+          </div>
+          <Button type="submit" variant="contained">
+            Agregar ruta
+          </Button>
+        </form>
       </div>
     </div>
   );
