@@ -3,6 +3,7 @@ import axios from "axios";
 import Link from "next/link";
 import styles from "../styles/gestorRutasTarjetas.module.css";
 import { AiOutlineArrowLeft } from "react-icons/ai";
+import { Snackbar } from "@mui/material";
 
 const urlApi = "https://api-guia-escolar.herokuapp.com";
 
@@ -10,6 +11,8 @@ export default function GeneradorRutas() {
   const [tarjetas, setTarjetas] = React.useState(null);
   const [rutas, setRutas] = React.useState(null);
 
+  const [open, setOpen] = React.useState(false);
+  const [mensaje, setMensaje] = React.useState("");
   const actualizarTarjetas = () => {
     axios
       .get(urlApi + "/admin/tarjetas")
@@ -59,6 +62,22 @@ export default function GeneradorRutas() {
     }
   };
 
+  const accionarTarjeta = (id) => {
+    axios
+      .get(urlApi + "/tarjeta/" + id + "/on")
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    setOpen(true);
+    setMensaje("Tarjeta " + id + " activada");
+    setTimeout(() => {
+      setOpen(false);
+    }, 2000);
+  };
+
   return (
     <div className={styles.container}>
       <div
@@ -86,7 +105,7 @@ export default function GeneradorRutas() {
           style={{ width: "30px", height: "30px", paddingLefth: "10px" }}
         ></div>
       </div>
-
+      <Snackbar open={open} message={mensaje} />
       <p>
         Esta pagina genera las rutas para la app, tambien puedes agregar nuevas
         tarjetas para apliar tus rutas
@@ -106,6 +125,7 @@ export default function GeneradorRutas() {
                     className={styles.tarjeta}
                     id={tarjeta.id}
                     key={tarjeta.id}
+                    onClick={() => accionarTarjeta(tarjeta.id)}
                   >
                     <div className={styles.tarjetaCabeza}>
                       <h3>Nombre: {tarjeta.propiedades.nombre}</h3>
