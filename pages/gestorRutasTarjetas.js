@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import Link from "next/link";
 import styles from "../styles/gestorRutasTarjetas.module.css";
-import { AiOutlineArrowLeft } from "react-icons/ai";
+import { AiOutlineArrowLeft, AiFillEye } from "react-icons/ai";
 import { Snackbar } from "@mui/material";
 
 const urlApi = "https://api-guia-escolar.herokuapp.com";
@@ -101,9 +101,11 @@ export default function GeneradorRutas() {
           </div>
         </Link>
         <h3>Administrador</h3>
-        <div
-          style={{ width: "30px", height: "30px", paddingLefth: "10px" }}
-        ></div>
+        <a href={urlApi + "/mostrarRutas"}>
+          <AiFillEye
+            style={{ width: "30px", height: "30px", paddingLefth: "10px" }}
+          />
+        </a>  
       </div>
       <Snackbar open={open} message={mensaje} />
       <p>
