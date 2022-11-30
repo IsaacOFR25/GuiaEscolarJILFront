@@ -384,8 +384,16 @@ export default function guia2() {
                   marginLeft: "5px",
                 }}
               >
-                <h3 style={{ marginTop: "0" }}>Este esta ubicado en...</h3>
-                <p style={{ color: "22222", margin: "0", marginTop: "5px" }}>
+                <h3 style={{ marginTop: "0" }}>Este está ubicado en...</h3>
+                <p
+                  style={{
+                    color: "22222",
+                    margin: "0",
+                    marginTop: "5px",
+                    maxWidth: "70%",
+                    textOverflow: "clip",
+                  }}
+                >
                   {punto.propiedades.ubicacion.descripcion}
                 </p>
               </div>
