@@ -1,0 +1,54 @@
+.progreso-contenedor {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  max-width: 80vw;
+  margin: 0 auto;
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+  overflow-x: scroll;
+}
+
+.infomacion-punto {
+  min-width: 61px;
+  margin: 5px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.circulo {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: #000;
+}
+
+.informacion {
+  font-size: 0.8rem;
+  color: #000;
+}
+
+.linea {
+  position: relative;
+  left: 2rem;
+  bottom: 3.7rem;
+  z-index: -1;
+  width: 3rem;
+  height: 0.2rem;
+  background-color: #e0e0e0;
+}
+
+.activo {
+  background-color: #00b399;
+  color: #fff;
+  font-weight: bold;
+}

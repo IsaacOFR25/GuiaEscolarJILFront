@@ -105,7 +105,7 @@ export default function GeneradorRutas() {
           <AiFillEye
             style={{ width: "30px", height: "30px", paddingLefth: "10px" }}
           />
-        </a>  
+        </a>
       </div>
       <Snackbar open={open} message={mensaje} />
       <p>
@@ -279,6 +279,7 @@ export default function GeneradorRutas() {
                 textAlign: "center",
                 padding: "10px 0px",
                 color: "white",
+                marginBottom: "50px",
               }}
             >
               Agregar Ruta

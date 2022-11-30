@@ -137,11 +137,20 @@ export default function agregarTarjeta() {
           <TextField
             id="nombre"
             name="nombre"
-            label="Nombre de la tarjeta"
+            label="Nombre de la Ubicacion"
             variant="outlined"
             type="text"
-            style={{ marginBottom: "20px" }}
           />
+          <p
+            style={{
+              margin: "0",
+              marginBottom: "20px",
+              padding: "0 10px",
+              color: "#22222",
+            }}
+          >
+            Ejemplo: Edificio A, Explanada, Cafeteria
+          </p>
 
           <Select
             labelId="modelo"
@@ -223,7 +232,7 @@ export default function agregarTarjeta() {
             variant="contained"
             color="primary"
             type="submit"
-            style={{ marginBottom: "20px" }}
+            style={{ marginBottom: "100px" }}
           >
             Agregar tarjeta
           </Button>

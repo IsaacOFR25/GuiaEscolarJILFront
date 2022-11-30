@@ -1,4 +1,5 @@
 import "../styles/globals.css";
+import "../styles/horizontalStepper.css";
 import Script from "next/script";
 
 function MyApp({ Component, pageProps }) {

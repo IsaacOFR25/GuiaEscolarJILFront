@@ -16,22 +16,75 @@ export default function guia2() {
   const router = useRouter();
   const { id, pc } = router.query;
   //JSON ruta y JSON Punto de control
-  const [ruta, setRuta] = useState({});
-  const [punto, setPunto] = useState({});
+  const [ruta, setRuta] = useState(null);
+  const [punto, setPunto] = useState(null);
+  const [tarjetas, setTarjetas] = useState({});
   //Estados de nuestra pagina
   const [ubicacion, setUbicacion] = useState([0, 0]);
   const [distancia, setDistancia] = useState(99);
   const [usuarioListo, setUsuarioListo] = useState(false);
   const [existeSigPunto, setExisteSigPunto] = useState(false);
+  //Para guardar el progreso del usuario
+  const [progreso, setProgreso] = useState(null);
+  //Funcion para obtener y renderizar el progreso del usuario
+  const obtenerProgreso = () => {
+    //Si el objeto ruta, y la variable pc  es diferente a null
+    if (ruta != null && pc != null) {
+      let numeroPuntos = parseInt(ruta.propiedades.numeroPuntos);
+      let numeroPuntosCompletados = parseInt(pc) - 1;
+      let contadorDeProgreso = 0;
+      //Obtener el listado de puntos a recorrer ruta.propiedades.puntosLista
+      let puntosLista = ruta.propiedades.puntosLista.map((punto) => {
+        return punto[0];
+      });
+      console.log("Numero de puntos: " + numeroPuntos);
+      console.log("tamaño array: " + puntosLista.length);
+      console.log("Puntos lista: " + puntosLista);
 
+      let elementoHTML = puntosLista.map((punto) => {
+        // return tarjeta.propiedades.nombre;
+        contadorDeProgreso++;
+        let activo =
+          contadorDeProgreso <= numeroPuntosCompletados ? true : false;
+        return (
+          <>
+            <div className="infomacion-punto">
+              <div className={activo ? "circulo activo" : "circulo"}>
+                {contadorDeProgreso}
+              </div>
+              <p
+                className={activo ? "informacion activo" : "informacion"}
+                style={{ color: "#000", background: "none" }}
+              >
+                {
+                  //Obtener el nombre del punto de el array de objetos tarjetas.propiedades.nombre
+                  //Donde "punto" sea igual a tarjetas.id
+                  tarjetas.map((tarjeta) => {
+                    if (tarjeta.id == punto) {
+                      return tarjeta.propiedades.nombre;
+                    }
+                  })
+                }
+              </p>
+              {contadorDeProgreso !== numeroPuntos && (
+                <div className={activo ? "linea activo" : "linea"}></div>
+              )}
+            </div>
+          </>
+        );
+      });
+      setProgreso(elementoHTML);
+    }
+  };
   useEffect(() => {
     //Obtener ruta y dentro de esta obtener el punto de control acutual, despues llama a la funcion para obtener el punto especifico y lo guarda en el estado
     setRuta(obtenerJSONRuta());
+    obtenerJSONTarjetas();
   }, [id]);
 
   useEffect(() => {
     //Verifica si existe el punto de control actual
-    setExisteSigPunto(isNotNull(punto.propiedades));
+    setExisteSigPunto(isNotNull(punto));
   }, [punto]);
 
   useEffect(() => {
@@ -139,6 +192,20 @@ export default function guia2() {
       });
   };
 
+  const obtenerJSONTarjetas = () => {
+    axios
+      .get(urlApi + "/admin/tarjetas/")
+      .then((res) => {
+        return res.data;
+      })
+      .then((data) => {
+        setTarjetas(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   //Metodo para calcular la distancia entre dos puntos
   const getMetros = function (lat1, lon1, lat2, lon2) {
     console.count("Recibido: " + lat1 + " " + lon1 + " " + lat2 + " " + lon2);
@@ -190,7 +257,6 @@ export default function guia2() {
   //Verifica si el valor recibido es null o undefined
   const isNotNull = (value) => {
     //regresa true si el valor no es null o undefined
-    console.log("El valor es: " + value, value !== null && value !== undefined);
     return value !== null && value !== undefined;
   };
 
@@ -205,94 +271,185 @@ export default function guia2() {
     //Si no, se muestra un mensaje de que el usuario debe estar listo para comenzar
     //cuando el usuario presiona el boton de comenzar, se muestra el identificador de la tarjeta
     //y se muestra el boton de ver query
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        width: "100vw",
-        padding: "0 20px",
-      }}
-    >
-      {usuarioListo ? (
-        <div>
-          <h1
-            style={{
-              padding: "0 0 50px 0",
-            }}
-          >
-            Tu siguiente punto de control es{punto.propiedades.nombre}
-          </h1>
-          <h2>Descripcion de la ruta:</h2>
-          <p> {ruta.propiedades.descripcion}</p>
-          <h2
-            style={{
-              padding: "50px 0 0 0",
-            }}
-          >
-            Tienes que llegar al <b>Punto de control</b> ubicado en:
-          </h2>
-          <div className={styles.tarjeta}>
-            <p>{punto.propiedades.ubicacion.descripcion}</p>
+    <>
+      <div
+        id="fondo"
+        style={{
+          backgroundColor: "#00B399",
+          zIndex: "-1",
+          width: "100vw",
+          height: "28vh",
+          borderRadius: "20px",
+          position: "absolute",
+          top: "-10px",
+          visibility: usuarioListo ? "visible" : "collapse",
+        }}
+      ></div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          height: "100vh",
+          width: "100vw",
+          padding: "0 20px",
+          marginTop: "50px",
+        }}
+      >
+        {usuarioListo ? (
+          <div>
             <div
               style={{
-                display: "flex",
-                width: "100%",
-                justifyContent: "space-evenly",
+                borderTopLeftRadius: "50px",
+                borderBottomRightRadius: "50px",
+                background: "#fff",
+                textShadow:
+                  "1px 0px 1px #CCCCCC, 0px 1px 1px #EEEEEE, 2px 1px 1px #CCCCCC, 1px 2px 1px #EEEEEE, 3px 2px 1px #CCCCCC, 2px 3px 1px #EEEEEE, 4px 3px 1px #CCCCCC, 3px 4px 1px #EEEEEE, 5px 4px 1px #CCCCCC, 4px 5px 1px #EEEEEE, 6px 5px 1px #CCCCCC, 5px 6px 1px #EEEEEE, 7px 6px 1px #CCCCCC, 2px 2px 2px rgba(206,109,105,0)",
               }}
             >
-              <p>Latitud: {punto.propiedades.ubicacion.latitud}</p>
-              <p>
-                Longitud:
-                {punto.propiedades.ubicacion.longitud}
-              </p>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "baseline",
+                  color: "#000",
+                }}
+              >
+                <div>
+                  <p style={{ margin: "10px 0 0 0", fontSize: "2rem" }}>
+                    Estas a...
+                  </p>
+                  <p
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "3rem",
+                      margin: "4px 4px 30px 0",
+                    }}
+                  >
+                    {distancia}
+                    <span style={{ fontSize: "1rem" }}>mts</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <p
+              style={{
+                padding: "60px 0 0 0",
+                fontSize: "1.5rem",
+              }}
+            >
+              De {punto.propiedades.nombre}, tu siguiente{" "}
+              <span style={{ color: "#00B399", fontWeight: "bold" }}>
+                Punto de control
+              </span>
+            </p>
+            <div
+              className={styles.tarjeta}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  flexDirection: "column",
+                }}
+              >
+                <h3 style={{ marginTop: "0" }}>Recuerda que vamos hacia...</h3>
+                <p style={{ color: "22222", margin: "0", marginTop: "5px" }}>
+                  {" "}
+                  {ruta.propiedades.descripcion}
+                </p>
+              </div>
+              <Image src="/img/destination.png" width="80" height="80" />
+            </div>
+
+            <div
+              className={styles.tarjeta}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              <Image src="/img/next.png" width="80" height="80" />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  flexDirection: "column",
+                  marginLeft: "5px",
+                }}
+              >
+                <h3 style={{ marginTop: "0" }}>Este esta ubicado en...</h3>
+                <p style={{ color: "22222", margin: "0", marginTop: "5px" }}>
+                  {punto.propiedades.ubicacion.descripcion}
+                </p>
+              </div>
+            </div>
+
+            <div
+              id="progreso"
+              className="progreso-contenedor"
+              style={{
+                justifyContent:
+                  parseInt(ruta.propiedades.numeroPuntos) > 4
+                    ? "flex-start"
+                    : "center",
+              }}
+            >
+              {progreso}
+            </div>
+
+            <div
+              id="ar"
+              style={{
+                width: "100%",
+                backgroundColor: distancia < 30 ? "#00B399" : "rgb(0,0,0,0)",
+                marginTop: "30px",
+                borderRadius: "10px",
+                textAlign: "center",
+                padding: "10px 0px",
+                color: distancia < 30 ? "white" : "#e63232",
+                border: distancia < 30 ? "none" : "1px solid #e63232",
+                borderRadius: "5px",
+              }}
+              onClick={() => (distancia < 30 ? redirigirAR() : null)}
+            >
+              {distancia < 30 ? "Realidad aumentada" : "No estas cerca..."}
             </div>
           </div>
-
-          <h4>Tu ubicacion es: {ubicacion}</h4>
-
-          <h4>Distancia: {distancia} metros</h4>
-          <div
-            id="ar"
-            style={{
-              width: "100%",
-              backgroundColor: "#00B399",
-              marginTop: "30px",
-              borderRadius: "10px",
-              textAlign: "center",
-              padding: "10px 0px",
-              color: "white",
-              visibility: distancia < 30 ? "visible" : "hidden",
-            }}
-            onClick={() => redirigirAR()}
-          >
-            Realidad Aumentada
+        ) : (
+          <div>
+            <h1>¿Estas list@ para ver tu siguiente punto de control?</h1>
+            <Image src="/img/puntoControl.png" width={500} height={500} />
+            <div
+              style={{
+                width: "100%",
+                backgroundColor: "#00B399",
+                marginTop: "30px",
+                borderRadius: "10px",
+                textAlign: "center",
+                padding: "10px 0px",
+                color: "white",
+              }}
+              onClick={() => {
+                if (existeSigPunto) {
+                  setUsuarioListo(true);
+                  obtenerProgreso();
+                } else {
+                  redirigirFinal();
+                }
+              }}
+            >
+              List@
+            </div>
           </div>
-        </div>
-      ) : (
-        <div>
-          <h1>¿Estas list@ para ver tu siguiente punto de control?</h1>
-          <Image src="/img/puntoControl.png" width={500} height={500} />
-          <div
-            style={{
-              width: "100%",
-              backgroundColor: "#00B399",
-              marginTop: "30px",
-              borderRadius: "10px",
-              textAlign: "center",
-              padding: "10px 0px",
-              color: "white",
-            }}
-            onClick={() => {
-              existeSigPunto ? setUsuarioListo(true) : redirigirFinal();
-            }}
-          >
-            List@
-          </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 }

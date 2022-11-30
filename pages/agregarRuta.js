@@ -1,7 +1,11 @@
 import React from "react";
 import axios from "axios";
 import Link from "next/link";
-import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
+import {
+  AiOutlineArrowLeft,
+  AiOutlineArrowRight,
+  AiOutlineArrowUp,
+} from "react-icons/ai";
 import { TextField, Button } from "@mui/material";
 
 const urlApi = "https://api-guia-escolar.herokuapp.com";
@@ -87,8 +91,8 @@ export default function agregarRuta() {
             const nombre = e.target.nombre.value;
             const descripcion = e.target.descripcion.value;
             const fecha = new Date().toLocaleDateString();
-            const numeroPuntosJson = { numeroPuntos: numeroPuntos };
-            const puntosListaJson = { puntosLista: puntosLista };
+            //Modificar la ultima entrada de puntosLista, el ultimo elemento[1] se remplaza por FIN
+            puntosLista[puntosLista.length - 1][1] = "FIN";
             const nuevaRuta = {
               id: identificador,
               propiedades: {
@@ -145,6 +149,9 @@ cada nobre es un boton, al ser precionado se agregara el identificador de la tar
               Selecciona en orden los puntos de control que tendra tu ruta.{" "}
               <br />
               Ejemplo: Tarjeta 1 - Izquierda, Tarjeta 2 - Derecha....
+              <br />
+              Nota: El ultimo punto que selecciones mostrara AR de Llegada al
+              lugar
             </p>
             <div
               style={{
@@ -156,38 +163,64 @@ cada nobre es un boton, al ser precionado se agregara el identificador de la tar
               {tarjetas &&
                 tarjetas.map((tarjeta) => {
                   return (
-                    <div
-                      style={{
-                        display: "flex",
-                        flexWrap: "nowrap",
-                        alignItems: "stretch",
-                      }}
-                    >
-                      <Button
-                        startIcon={<AiOutlineArrowLeft />}
-                        variant="outlined"
-                        key={tarjeta.id}
-                        onClick={() => {
-                          setPuntosLista([...puntosLista, [tarjeta.id, "IZQ"]]);
-                          setNumeroPuntos(numeroPuntos + 1);
+                    <>
+                      <div
+                        style={{
+                          margin: "0 0",
+                          display: "flex",
+                          justifyContent: "center",
                         }}
-                        style={{ margin: "5px", width: "45%" }}
                       >
                         <p>{tarjeta.propiedades.nombre}</p>
-                      </Button>
-                      <Button
-                        endIcon={<AiOutlineArrowRight />}
-                        variant="outlined"
-                        key={tarjeta.id + 100}
-                        onClick={() => {
-                          setPuntosLista([...puntosLista, [tarjeta.id, "DER"]]);
-                          setNumeroPuntos(numeroPuntos + 1);
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexWrap: "nowrap",
+                          alignItems: "stretch",
                         }}
-                        style={{ margin: "5px", width: "45%" }}
                       >
-                        <p>{tarjeta.propiedades.nombre}</p>
-                      </Button>
-                    </div>
+                        <Button
+                          startIcon={<AiOutlineArrowLeft />}
+                          variant="outlined"
+                          key={tarjeta.id}
+                          onClick={() => {
+                            setPuntosLista([
+                              ...puntosLista,
+                              [tarjeta.id, "IZQ"],
+                            ]);
+                            setNumeroPuntos(numeroPuntos + 1);
+                          }}
+                          style={{ margin: "5px", width: "33%" }}
+                        ></Button>
+                        <Button
+                          endIcon={<AiOutlineArrowUp />}
+                          variant="outlined"
+                          key={tarjeta.id + 100}
+                          onClick={() => {
+                            setPuntosLista([
+                              ...puntosLista,
+                              [tarjeta.id, "REC"],
+                            ]);
+                            setNumeroPuntos(numeroPuntos + 1);
+                          }}
+                          style={{ margin: "5px", width: "33%" }}
+                        ></Button>
+                        <Button
+                          endIcon={<AiOutlineArrowRight />}
+                          variant="outlined"
+                          key={tarjeta.id + 100}
+                          onClick={() => {
+                            setPuntosLista([
+                              ...puntosLista,
+                              [tarjeta.id, "DER"],
+                            ]);
+                            setNumeroPuntos(numeroPuntos + 1);
+                          }}
+                          style={{ margin: "5px", width: "33%" }}
+                        ></Button>
+                      </div>
+                    </>
                   );
                 })}
               {/* Boton para eliminar la ultima tarjeta agregada a puntosLista y restar 1 a numeroPuntos */}
@@ -220,31 +253,33 @@ cada nobre es un boton, al ser precionado se agregara el identificador de la tar
             </div>
           </div>
 
-          <div style={{ display: "flex", flexWrap: "nowrap" }}>
-            <div>
-              <TextField
-                id="numeroPuntos"
-                name="numeroPuntos"
-                label="No. total de puntos"
-                variant="outlined"
-                type="text"
-                value={numeroPuntos}
-                readOnlys
-                style={{ margin: "20px 2px" }}
-              />
-            </div>{" "}
-            <div>
-              <TextField
-                id="puntosLista"
-                name="puntosLista"
-                label="Puntos de la ruta"
-                variant="outlined"
-                type="text"
-                value={puntosLista}
-                readOnly
-                style={{ margin: "20px 2px" }}
-              />
-            </div>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "nowrap",
+              alignItems: "stretch",
+            }}
+          >
+            <TextField
+              id="numeroPuntos"
+              name="numeroPuntos"
+              label="#Puntos"
+              variant="outlined"
+              type="text"
+              value={numeroPuntos}
+              readOnlys
+              style={{ margin: "20px 2px", width: "30%" }}
+            />
+            <TextField
+              id="puntosLista"
+              name="puntosLista"
+              label="Puntos de la ruta"
+              variant="outlined"
+              type="text"
+              value={puntosLista}
+              readOnly
+              style={{ margin: "20px 2px", width: "70%" }}
+            />
           </div>
           <Button type="submit" variant="contained">
             Agregar ruta
