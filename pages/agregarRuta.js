@@ -8,7 +8,7 @@ import {
 } from "react-icons/ai";
 import { TextField, Button } from "@mui/material";
 
-const urlApi = "https://api-guia-escolar.herokuapp.com";
+const urlApi = "https://guia-escolar-back-end-drago-do.vercel.app";
 
 export default function agregarRuta() {
   const [identificador, setIdentificador] = React.useState("");

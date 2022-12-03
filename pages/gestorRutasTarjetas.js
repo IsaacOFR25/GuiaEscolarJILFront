@@ -5,7 +5,7 @@ import styles from "../styles/gestorRutasTarjetas.module.css";
 import { AiOutlineArrowLeft, AiFillEye } from "react-icons/ai";
 import { Snackbar } from "@mui/material";
 
-const urlApi = "https://api-guia-escolar.herokuapp.com";
+const urlApi = "https://guia-escolar-back-end-drago-do.vercel.app";
 
 export default function GeneradorRutas() {
   const [tarjetas, setTarjetas] = React.useState(null);
