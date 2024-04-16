@@ -4,7 +4,7 @@ import Link from "next/link";
 import { AiOutlineArrowLeft, AiFillEnvironment } from "react-icons/ai";
 import { TextField, Select, MenuItem, Button } from "@mui/material";
 
-const urlApi = "https://guia-escolar-back-end-drago-do.vercel.app";
+const urlApi = process.env.API_URL;
 
 export default function agregarTarjeta() {
   const [identificador, setIdentificador] = React.useState("");

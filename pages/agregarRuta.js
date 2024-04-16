@@ -8,7 +8,7 @@ import {
 } from "react-icons/ai";
 import { TextField, Button } from "@mui/material";
 
-const urlApi = "https://guia-escolar-back-end-drago-do.vercel.app";
+const urlApi = process.env.API_URL;
 
 export default function agregarRuta() {
   const [identificador, setIdentificador] = React.useState("");
