@@ -6,7 +6,7 @@ import Image from "next/image";
 
 import styles from "../styles/gestorRutasTarjetas.module.css";
 
-const urlApi = process.env.API_URL;
+const urlApi = process.env.NEXT_PUBLIC_API_URL;
 var longitudPunto = 0;
 var latitudPunto = 0;
 var puntosRuta = [];

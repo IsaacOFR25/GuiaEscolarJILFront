@@ -4,7 +4,7 @@ import Link from "next/link";
 import { AiOutlineArrowLeft, AiFillEnvironment } from "react-icons/ai";
 import { TextField, Select, MenuItem, Button } from "@mui/material";
 
-const urlApi = process.env.API_URL;
+const urlApi = process.env.NEXT_PUBLIC_API_URL;
 
 export default function agregarTarjeta() {
   const [identificador, setIdentificador] = React.useState("");

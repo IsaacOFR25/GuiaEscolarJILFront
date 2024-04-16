@@ -8,7 +8,7 @@ import {
 } from "react-icons/ai";
 import { TextField, Button } from "@mui/material";
 
-const urlApi = process.env.API_URL;
+const urlApi = process.env.NEXT_PUBLIC_API_URL;
 
 export default function agregarRuta() {
   const [identificador, setIdentificador] = React.useState("");
