@@ -5,7 +5,7 @@ import styles from "../styles/gestorRutasTarjetas.module.css";
 import { AiOutlineArrowLeft, AiFillEye } from "react-icons/ai";
 import { Snackbar } from "@mui/material";
 
-const urlApi = process.env.API_URL;
+const urlApi = process.env.NEXT_PUBLIC_API_URL;
 
 export default function GeneradorRutas() {
   const [tarjetas, setTarjetas] = React.useState(null);
