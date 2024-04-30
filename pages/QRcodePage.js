@@ -5,7 +5,7 @@ import Link from "next/link";
 import axios from "axios";
 
 const urlApi = process.env.NEXT_PUBLIC_API_URL;
-const urlAppGuia = "https://guia-escolar-drago-do.vercel.app/guia";
+const urlAppGuia = "http://localhost:3000"+"/guia";
 class QRcodePage extends React.Component {
   constructor(props) {
     super(props);
@@ -109,7 +109,7 @@ class QRcodePage extends React.Component {
     let finalURL = decodedText;
     //hacer petición a la base de datos para ver si existe la ruta
     axios
-      .get(urlApi + "/admin/rutas/" + finalURL)
+      .get(urlApi + "/Admin/Rutas/" + finalURL)
       .then((res) => {
         console.log("id de ruta:" + res.data.id);
         if (res.status === 200) {
