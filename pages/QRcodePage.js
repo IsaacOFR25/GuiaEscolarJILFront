@@ -5,7 +5,7 @@ import Link from "next/link";
 import axios from "axios";
 
 const urlApi = process.env.NEXT_PUBLIC_API_URL;
-const urlAppGuia = "http://localhost:3000"+"/guia";
+const urlAppGuia = "https://guiaescolar.vercel.app/guia";
 class QRcodePage extends React.Component {
   constructor(props) {
     super(props);
